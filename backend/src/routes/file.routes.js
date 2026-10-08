@@ -1,11 +1,18 @@
 import { Router } from "express";
-import { downloadFile } from "../controllers/file.controller.js";
-import { deleteMedia } from "../controllers/file.controller.js";
+import { 
+    downloadFile,
+    deleteMedia,
+    getMediaHistory
+} from "../controllers/file.controller.js";
+import { verifyJWT } from "../middlewares/auth.middleware.js";
 
 const router = Router();
 
-router.get("/download/:filename", downloadFile);
+router.get("/history", verifyJWT, getMediaHistory);
 
-router.delete("/:original/:processed", deleteMedia);
+router.get("/download/:id", verifyJWT, downloadFile);
+
+router.delete("/:id", verifyJWT, deleteMedia);
+
 
 export default router;

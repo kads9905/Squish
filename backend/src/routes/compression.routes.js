@@ -4,11 +4,20 @@ import {
     compressImageController,
     compressVideoController
 } from "../controllers/compression.controller.js";
+import { verifyJWT } from "../middlewares/auth.middleware.js";
 
 const router = Router();
 
-router.post("/image", compressImageController);
+router.post(
+    "/image",
+    verifyJWT,
+    compressImageController
+);
 
-router.post("/video", compressVideoController);
+router.post(
+    "/video",
+    verifyJWT,
+    compressVideoController
+);
 
 export default router;
