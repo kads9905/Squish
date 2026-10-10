@@ -1,0 +1,369 @@
+@import "tailwindcss";
+
+/* dark mode is class-based (html.dark), set by ThemeContext and the pre-paint script in index.html */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ─────────────────────────── Squish design tokens ───────────────────────────
+   Paper + ink, one lime accent. Lime is a FILL behind dark text — never lime
+   text on light backgrounds. Components reference only these tokens. */
+@theme {
+  --font-display: "Bricolage Grotesque", "Inter Tight", ui-sans-serif, sans-serif;
+  --font-sans: "Inter Tight", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+
+  /* surfaces */
+  --color-paper: #f4f2ec; /* page canvas */
+  --color-surface: #ffffff; /* cards, inputs, menus */
+  --color-soft: #eeece6; /* quiet fills: segmented tracks, secondary buttons */
+  --color-soft-hover: #e6e3db;
+
+  /* ink scale (text, primary buttons) */
+  --color-ink: #151413;
+  --color-ink-hover: #000000;
+  --color-on-ink: #ffffff; /* text placed on an ink fill */
+  --color-ink-muted: #5e5c57;
+  --color-ink-subtle: #8e8b84;
+  --color-ink-faint: #a8a59d;
+
+  /* solid emphasis fills: primary buttons, active pills, toggles, meters */
+  --color-fill: #151413;
+  --color-fill-hover: #000000;
+  --color-on-fill: #ffffff;
+
+  /* decorative tiles (play chip, video thumbnails): dark tile, contrasting icon */
+  --color-chip: #151413;
+  --color-on-chip: #ffffff;
+
+  /* the logo ball */
+  --color-blob: #151413;
+  --color-blob-highlight: #c5f04f;
+
+  /* hairlines */
+  --color-line: #e6e3dc;
+  --color-line-strong: #d6d2c9;
+
+  /* accent — lime */
+  --color-accent: #c5f04f;
+  --color-accent-hover: #b4e43a;
+  --color-accent-soft: #eef8d3;
+
+  /* status */
+  --color-success: #2b8a52;
+  --color-success-soft: #e3f3e8;
+  --color-warning: #a8700f;
+  --color-warning-soft: #fbf0d9;
+  --color-danger: #c93c25;
+  --color-danger-soft: #fbe6e1;
+
+  --color-checker-a: #f1efe9;
+  --color-checker-b: #e7e4dd;
+
+  --radius-card: 1.5rem;
+  --radius-inner: 1.125rem;
+
+  --shadow-card: 0 1px 2px rgb(21 20 19 / 0.04), 0 8px 24px -12px rgb(21 20 19 / 0.12);
+  --shadow-pop: 0 12px 40px -12px rgb(21 20 19 / 0.28);
+
+  --ease-squish: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
+
+  /* entrance animations use "backwards": hold the first frame during delays, then release so hover transforms still apply */
+  --animate-fade-up: fade-up 0.5s var(--ease-out) backwards;
+  --animate-fade-in: fade-in 0.3s ease-out backwards;
+  --animate-pop-in: pop-in 0.28s var(--ease-squish) backwards;
+  --animate-squish: squish-bounce 1.1s cubic-bezier(0.34, 1.3, 0.64, 1) both;
+}
+
+/* ─────────────────────────── Dark theme ───────────────────────────
+   Deep neutral blacks (not grey), warm off-white text and buttons, and the
+   same lime. Brand marks keep their colour: the logo ball and media tiles go
+   lime-on-dark instead of washing out to white. */
+html.dark {
+  color-scheme: dark;
+
+  --color-paper: #0d0d0c;
+  --color-surface: #161615;
+  --color-soft: #20201e;
+  --color-soft-hover: #2a2a28;
+
+  --color-ink: #f3f1eb;
+  --color-ink-hover: #ffffff;
+  --color-on-ink: #0d0d0c;
+  --color-ink-muted: #a9a69e;
+  --color-ink-subtle: #7d7a74;
+  --color-ink-faint: #5e5c57;
+
+  --color-fill: #f3f1eb;
+  --color-fill-hover: #ffffff;
+  --color-on-fill: #151413;
+
+  --color-chip: #262624;
+  --color-on-chip: #c5f04f;
+
+  --color-blob: #c5f04f;
+  --color-blob-highlight: #ffffff;
+
+  --color-line: #252523;
+  --color-line-strong: #363633;
+
+  --color-accent-hover: #d3f76e;
+  --color-accent-soft: #171c09;
+
+  --color-success: #5fd08f;
+  --color-success-soft: #10241a;
+  --color-warning: #eeb850;
+  --color-warning-soft: #271f0d;
+  --color-danger: #f2806a;
+  --color-danger-soft: #2c1511;
+
+  --color-checker-a: #191918;
+  --color-checker-b: #20201e;
+
+  --shadow-card: 0 1px 0 rgb(255 255 255 / 0.03) inset, 0 10px 30px -14px rgb(0 0 0 / 0.7);
+  --shadow-pop: 0 18px 50px -14px rgb(0 0 0 / 0.85);
+}
+
+/* Lime is always a light fill, so anything sitting on it keeps the light-theme
+   ink scale (dark text, dark fills, dark logo ball). */
+html.dark .bg-accent {
+  color: #151413;
+  --color-ink: #151413;
+  --color-ink-hover: #000000;
+  --color-on-ink: #ffffff;
+  --color-ink-muted: #3f3e3a;
+  --color-ink-subtle: #55544f;
+  --color-soft: rgb(255 255 255 / 0.45);
+  --color-fill: #151413;
+  --color-fill-hover: #000000;
+  --color-on-fill: #ffffff;
+  --color-chip: #151413;
+  --color-on-chip: #ffffff;
+  --color-blob: #151413;
+  --color-blob-highlight: #ffffff;
+}
+
+/* keyframes live outside @theme so they are always emitted (some are used via arbitrary animate-[…] classes) */
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes pop-in {
+  from { opacity: 0; transform: translateY(-4px) scale(0.96); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+/* squash & stretch: wide-and-short, overshoot tall, settle */
+@keyframes squish-bounce {
+  0% { transform: scale(1, 1); }
+  28% { transform: scale(1.14, 0.8); }
+  52% { transform: scale(0.94, 1.07); }
+  72% { transform: scale(1.03, 0.97); }
+  100% { transform: scale(1, 1); }
+}
+/* a ball dropping in and landing with a squash (steps section) */
+@keyframes ball-drop {
+  0% { transform: translateY(-70px) scale(0.9, 1.1); }
+  55% { transform: translateY(0) scale(1, 1); }
+  68% { transform: translateY(0) scale(1.3, 0.72); }
+  84% { transform: translateY(-8px) scale(0.95, 1.05); }
+  100% { transform: translateY(0) scale(1, 1); }
+}
+/* hero headline words: rise in, overshoot with a small squash, settle */
+@keyframes word-rise {
+  0% { opacity: 0; transform: translateY(0.45em) scale(0.94, 1.1); }
+  55% { opacity: 1; transform: translateY(-0.05em) scale(1.05, 0.95); }
+  78% { transform: translateY(0) scale(0.99, 1.01); }
+  100% { transform: none; }
+}
+/* notifications: rise in with a squish, sink out */
+@keyframes toast-in {
+  0% { opacity: 0; transform: translateY(18px) scale(0.92, 1.06); }
+  55% { opacity: 1; transform: translateY(-3px) scale(1.03, 0.97); }
+  78% { transform: translateY(0) scale(0.99, 1.01); }
+  100% { transform: none; }
+}
+@keyframes toast-out {
+  0% { opacity: 1; transform: none; }
+  100% { opacity: 0; transform: translateY(14px) scale(0.96); }
+}
+@keyframes icon-pop {
+  0% { transform: scale(0.3); }
+  60% { transform: scale(1.18); }
+  100% { transform: scale(1); }
+}
+@keyframes icon-shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-2px) rotate(-8deg); }
+  50% { transform: translateX(2px) rotate(8deg); }
+  75% { transform: translateX(-1px) rotate(-4deg); }
+}
+/* toast goodbye: the hand waves twice */
+@keyframes wave {
+  0%, 100% { transform: rotate(0deg); }
+  20% { transform: rotate(-18deg); }
+  40% { transform: rotate(14deg); }
+  60% { transform: rotate(-10deg); }
+  80% { transform: rotate(6deg); }
+}
+@keyframes indeterminate {
+  from { left: -35%; }
+  to { left: 100%; }
+}
+@keyframes shimmer {
+  from { background-position: -200% 0; }
+  to { background-position: 200% 0; }
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+  }
+  body {
+    @apply bg-paper font-sans text-ink;
+    text-rendering: optimizeLegibility;
+  }
+  /* fade colours (not layout) while switching themes; ThemeContext adds the class briefly */
+  html.theme-transition,
+  html.theme-transition *,
+  html.theme-transition *::before,
+  html.theme-transition *::after {
+    transition:
+      background-color 0.35s ease,
+      border-color 0.35s ease,
+      color 0.35s ease,
+      fill 0.35s ease !important;
+  }
+  ::selection {
+    background: var(--color-accent);
+    color: #151413;
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-fill);
+    outline-offset: 2px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  /* surface card on paper */
+  .card {
+    @apply rounded-[var(--radius-card)] border border-line bg-surface;
+  }
+
+  /* gentle lift on hover for clickable cards */
+  .card-hover {
+    transition: transform 0.35s var(--ease-out), border-color 0.2s, box-shadow 0.35s var(--ease-out);
+  }
+  .card-hover:hover {
+    @apply -translate-y-1 border-line-strong shadow-[var(--shadow-card)];
+  }
+
+  /* display headline type */
+  .display {
+    @apply font-display font-bold tracking-[-0.05em];
+    font-variation-settings: "wdth" 100;
+  }
+
+  /* small section eyebrow */
+  .eyebrow {
+    @apply font-mono text-xs text-ink-subtle;
+  }
+
+  /* springy squash on press — buttons, chips, toggles */
+  .squish {
+    transition: transform 0.35s var(--ease-squish), background-color 0.2s, color 0.2s, border-color 0.2s, opacity 0.2s;
+  }
+  .squish:hover {
+    transform: scale(1.03, 0.97);
+  }
+  .squish:active {
+    transform: scale(1.08, 0.88);
+    transition-duration: 0.12s;
+  }
+
+  /* squish on hover from the baseline (inline headline chips, logo) */
+  .squish-hover {
+    transition: transform 0.45s var(--ease-squish);
+    transform-origin: 50% 85%;
+  }
+  .squish-hover:hover {
+    transform: scale(1.12, 0.84);
+  }
+
+  /* scroll reveal — <Reveal> toggles data-shown */
+  .reveal {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 0.7s var(--ease-out), transform 0.7s var(--ease-out);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+  .reveal[data-shown="true"] {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* chunky pill range input; --fill sets the filled length */
+  .squish-range {
+    @apply h-7 w-full cursor-pointer appearance-none rounded-full bg-transparent;
+  }
+  .squish-range::-webkit-slider-runnable-track {
+    @apply h-7 rounded-full;
+    background: linear-gradient(90deg, var(--color-accent) var(--fill), var(--color-soft) var(--fill));
+  }
+  .squish-range::-moz-range-track {
+    @apply h-7 rounded-full;
+    background: linear-gradient(90deg, var(--color-accent) var(--fill), var(--color-soft) var(--fill));
+  }
+  .squish-range::-webkit-slider-thumb {
+    @apply size-7 appearance-none rounded-full border-[5px] border-surface bg-[#151413] shadow-[0_2px_8px_rgb(0_0_0/0.22)];
+    transition: transform 0.3s var(--ease-squish);
+  }
+  /* dark: light knob ringed in the page colour */
+  .dark .squish-range::-webkit-slider-thumb {
+    background: var(--color-ink);
+    border-color: var(--color-paper);
+  }
+  .dark .squish-range::-moz-range-thumb {
+    background: var(--color-ink);
+    border-color: var(--color-paper);
+  }
+  .squish-range:active::-webkit-slider-thumb {
+    transform: scale(1.25, 0.8);
+  }
+  .squish-range::-moz-range-thumb {
+    @apply size-5 rounded-full border-[5px] border-surface bg-[#151413];
+  }
+
+  .skeleton {
+    @apply rounded-[var(--radius-inner)] bg-soft;
+    background-image: linear-gradient(90deg, transparent, rgb(255 255 255 / 0.35), transparent);
+    background-size: 200% 100%;
+    animation: shimmer 1.6s linear infinite;
+  }
+  .dark .skeleton {
+    background-image: linear-gradient(90deg, transparent, rgb(255 255 255 / 0.04), transparent);
+  }
+
+  /* checkerboard behind transparent images */
+  .bg-checker {
+    background-color: var(--color-checker-a);
+    background-image:
+      linear-gradient(45deg, var(--color-checker-b) 25%, transparent 25%),
+      linear-gradient(-45deg, var(--color-checker-b) 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, var(--color-checker-b) 75%),
+      linear-gradient(-45deg, transparent 75%, var(--color-checker-b) 75%);
+    background-size: 16px 16px;
+    background-position: 0 0, 0 8px, 8px -8px, -8px 0;
+  }
+}
