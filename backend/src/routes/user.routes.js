@@ -1,10 +1,13 @@
 import { Router } from "express";
-import { 
-    registerUser, 
-    loginUser, 
+import {
+    registerUser,
+    loginUser,
     getCurrentUser,
     refreshAccessToken,
-    logoutUser
+    logoutUser,
+    updateAccountDetails,
+    changeCurrentPassword,
+    deleteAccount
 } from "../controllers/user.controller.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
 
@@ -15,6 +18,12 @@ router.post("/register", registerUser);
 router.post("/login", loginUser);
 
 router.get("/me", verifyJWT, getCurrentUser);
+
+router.patch("/me", verifyJWT, updateAccountDetails);
+
+router.delete("/me", verifyJWT, deleteAccount);
+
+router.post("/change-password", verifyJWT, changeCurrentPassword);
 
 router.post("/refresh-token", refreshAccessToken);
 
