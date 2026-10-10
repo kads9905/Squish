@@ -1,6 +1,8 @@
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { ApiError } from "../utils/ApiError.js";
+import { deleteFile } from "../utils/deleteFiles.js";
+import { getImageDimensions } from "../services/image.service.js";
 import { MediaFile } from "../models/mediaFile.model.js";
 
 const uploadFile = asyncHandler(async (req, res) => {
@@ -13,19 +15,33 @@ const uploadFile = asyncHandler(async (req, res) => {
 
   const originalFormat = req.file.mimetype.split("/")[1];
 
-  const mediaFile = await MediaFile.create({
-    user: req.user._id,
+  const { width, height } = isImage
+    ? await getImageDimensions(req.file.path)
+    : { width: null, height: null };
 
-    originalName: req.file.originalname,
-    originalFilename: req.file.filename,
-    originalPath: req.file.path,
-    originalSize: req.file.size,
+  let mediaFile;
 
-    fileType,
-    originalFormat,
+  try {
+    mediaFile = await MediaFile.create({
+      user: req.user._id,
 
-    status: "uploaded",
-  });
+      originalName: req.file.originalname,
+      originalFilename: req.file.filename,
+      originalPath: req.file.path,
+      originalSize: req.file.size,
+
+      fileType,
+      originalFormat,
+      width,
+      height,
+
+      status: "uploaded",
+    });
+  } catch (error) {
+    // Don't leave an orphaned upload on disk
+    deleteFile(req.file.path);
+    throw error;
+  }
 
   return res.status(201).json(
     new ApiResponse(

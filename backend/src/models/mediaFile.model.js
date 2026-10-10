@@ -80,10 +80,49 @@ const mediaFileSchema = new Schema(
       type: String,
       default: null,
     },
+
+    // Max width for images, target height (e.g. "720") for videos
+    resize: {
+      type: String,
+      default: null,
+    },
+
+    // 0-100, updated while a video encode is running
+    progress: {
+      type: Number,
+      default: 0,
+    },
+
+    errorMessage: {
+      type: String,
+      default: null,
+    },
+
+    width: {
+      type: Number,
+      default: null,
+    },
+
+    height: {
+      type: Number,
+      default: null,
+    },
   },
   {
     timestamps: true,
   }
 );
+
+mediaFileSchema.index({ user: 1, createdAt: -1 });
+
+// Never leak absolute/relative server paths to clients
+mediaFileSchema.set("toJSON", {
+  transform: (doc, ret) => {
+    delete ret.originalPath;
+    delete ret.compressedPath;
+    delete ret.__v;
+    return ret;
+  },
+});
 
 export const MediaFile = mongoose.model("MediaFile", mediaFileSchema);
