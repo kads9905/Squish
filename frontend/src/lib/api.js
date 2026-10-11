@@ -11,7 +11,9 @@ export class ApiError extends Error {
 const parse = async (res) => {
   const body = await res.json().catch(() => null);
   if (!res.ok || body?.success === false) {
-    throw new ApiError(body?.message || `Request failed (${res.status})`, res.status, body?.errors);
+    // no JSON body means we never reached the Squish API (proxy/hosting problem or server asleep)
+    const fallback = body ? `Request failed (${res.status})` : "Couldn't reach Squish right now. Please try again in a moment.";
+    throw new ApiError(body?.message || fallback, res.status, body?.errors);
   }
   return body?.data;
 };

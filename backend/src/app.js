@@ -6,6 +6,11 @@ import { errorHandler, notFoundHandler } from "./middlewares/error.middleware.js
 
 const app = express();
 
+// In production requests arrive via Vercel's /api proxy and then Render's load balancer.
+// Trusting those two hops lets req.ip be the real visitor (the rate limiter needs this,
+// otherwise every user would share Vercel's IP and get locked out together).
+if (process.env.NODE_ENV === "production") app.set("trust proxy", 2);
+
 // CORS_ORIGIN can be a comma separated list. Cookies require an explicit origin,
 // so "*" is mapped to "reflect the request origin".
 const corsOrigin =
